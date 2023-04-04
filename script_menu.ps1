@@ -15,7 +15,7 @@ while($true) {
     Write-Host "4) Create an Active Directory Forest"
     Write-Host "5) Create an Active Directory Organizational Unit (OU)"
     Write-Host "6) Create an Active Directory User Account"
-    Write-Host "00) Exit Active Directory Configuration Wizard"
+    Write-Host "exit) Exit Active Directory Configuration Wizard"
     Write-Host "----------------------------------------------------"
     $Selection = Read-Host "Please make a selection..."
 
@@ -31,7 +31,9 @@ while($true) {
     Create-NewUser
     } elseif ($Selection -eq 6) {
     Create-NewUser
-    } elseif ($Selection -eq 00) {
+    } elseif ($Selection -eq "exit") {
+    Write-Host ""
+    Write-Host "You have exited the Active Directory Configuration Wizard successfully!"
     exit
     } else {
     Write-Host "Invalid Input!"
