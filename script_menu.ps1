@@ -6,6 +6,7 @@
     # [about_While] (https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_while?view=powershell-7.3)
 
 while($true) {
+    clear
     Write-Host "Welcome to the Active Directory Configuration Wizard"
     Write-Host "----------------------------------------------------"
     Write-Host "1) Assign Windows Server a static IPv4 address and Domain Name Server (DNS)"
