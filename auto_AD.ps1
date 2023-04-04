@@ -1,4 +1,4 @@
-# Script: Automate AD User Creation
+# Script: Automate Active Directory Configuration
 # Author: Mac's PC
 # Date of latest revision: 04 MAR 23
 
