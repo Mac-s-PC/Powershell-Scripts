@@ -40,7 +40,6 @@ function Create-NewUser {
     Get-ADUser -Filter * -Properties * | Format-Table Name, SamAccountName, Created, Company, Office, Department, Title, Enabled
 
     Read-Host "Press any key to continue..."
-    exit
 }
 
 while($true) {
@@ -53,7 +52,7 @@ while($true) {
     Write-Host "4) Create an Active Directory Forest"
     Write-Host "5) Create an Active Directory Organizational Unit (OU)"
     Write-Host "6) Create an Active Directory User Account"
-    Write-Host "00) Exit Active Directory Configuration Wizard"
+    Write-Host "exit) Exit Active Directory Configuration Wizard"
     Write-Host "----------------------------------------------------"
     $Selection = Read-Host "Please make a selection..."
 
@@ -69,7 +68,7 @@ while($true) {
     Create-NewUser
     } elseif ($Selection -eq 6) {
     Create-NewUser
-    } elseif ($Selection -eq 00) {
+    } elseif ($Selection -eq "exit") {
     exit
     } else {
     Write-Host "Invalid Input!"
