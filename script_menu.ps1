@@ -34,6 +34,7 @@ while($true) {
     } elseif ($Selection -eq "exit") {
     Write-Host ""
     Write-Host "You have exited the Active Directory Configuration Wizard successfully!"
+    Write-Host ""
     exit
     } else {
     Write-Host "Invalid Input!"
