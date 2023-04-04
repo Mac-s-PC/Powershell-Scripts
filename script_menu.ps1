@@ -7,7 +7,7 @@
 
 while($true) {
     Write-Host "Welcome to the Active Directory Configuration Wizard"
-    Write-Hots "----------------------------------------------------"
+    Write-Host "----------------------------------------------------"
     Write-Host "1) Assign Windows Server a static IPv4 address and Domain Name Server (DNS)"
     Write-Host "2) Rename Windows Server"
     Write-Host "3) Install Active Directory Domain Services"
@@ -15,7 +15,7 @@ while($true) {
     Write-Host "5) Create an Active Directory Organizational Unit (OU)"
     Write-Host "6) Create an Active Directory User Account"
     Write-Host "00) Exit Active Directory Configuration Wizard"
-    Write-Hots "----------------------------------------------------"
+    Write-Host "----------------------------------------------------"
     $Selection = Read-Host "Please make a selection..."
 
     if ($Selection -eq 1) {
