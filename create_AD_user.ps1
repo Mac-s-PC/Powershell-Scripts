@@ -1,3 +1,12 @@
+# Script: Automate AD User Creation
+# Author: Robert Gregor
+# Date of latest revision: 04 MAR 23
+
+# My Sources:
+    # [Press Any Key to Continue in PowerShell](https://java2blog.com/press-any-key-to-continue-powershell/)
+    # [Get-ADUser](https://learn.microsoft.com/en-us/powershell/module/activedirectory/get-aduser?view=windowsserver2022-ps)
+    # [Format-Table](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/format-table?view=powershell-7.3)
+
 function Create-NewUser {
     clear
     Write-Host ""
