@@ -69,6 +69,8 @@ while($true) {
     } elseif ($Selection -eq 6) {
     Create-NewUser
     } elseif ($Selection -eq "exit") {
+    Write-Host ""
+    Write-Host "You have exited the Active Directory Configuration Wizard successfully!"
     exit
     } else {
     Write-Host "Invalid Input!"
