@@ -53,7 +53,7 @@ while($true) {
     Write-Host "5) Create an Active Directory Organizational Unit (OU)"
     Write-Host "6) Create an Active Directory User Account"
     Write-Host "00) Exit Active Directory Configuration Wizard"
-    Write-Hoss "----------------------------------------------------"
+    Write-Host "----------------------------------------------------"
     $Selection = Read-Host "Please make a selection..."
 
     if ($Selection -eq 1) {
