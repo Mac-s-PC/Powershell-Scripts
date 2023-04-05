@@ -13,4 +13,6 @@ Set-DnsClientServerAddress -InterfaceIndex $interface.ifIndex -ServerAddresses $
 
 # Verify Changes 
 Write-Host ""
+Read-Host "Press any key to Verify Changes..."
+Write-Host ""
 ipconfig /all
