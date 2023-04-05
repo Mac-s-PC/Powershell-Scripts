@@ -11,6 +11,8 @@
 # Create-NewUser function takes user input to set six Active Directory properties
     #
 
+Import-Module ActiveDirectory
+
 function Create-NewUser {
     clear
     Write-Host ""
@@ -23,25 +25,7 @@ function Create-NewUser {
     Write-Host "Passwords must be no less than seven characters and must include at least three of the following four character classes:"
     Write-Host "Uppercase letters (A-Z), Lowercase letters (a-z), Digits (0-9), Special characters (e.g., !@#$%^&*)"
     Write-Host "" 
-    
-    $password = $null
-    $verify_password = $null
-
-    $password = $null
-    $verify_password = $null
-
-    while ($password -eq $null -or $password -ne $verify_password) {
-        $password = Read-Host -AsSecureString "Please enter $full_name's secure password"
-        $verify_password = Read-Host -AsSecureString "Please re-enter $full_name's secure password to verify"
-        if ($password -ne $verify_password) {
-            Write-Host "Passwords do not match, please try again"
-            $password = $null
-            $verify_password = $null
-        }
-    }
-
-    $password = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($password))
-
+    $password = Read-Host -AsSecureString "Please enter $full_name's secure password"
     $company_name = Read-Host "Please enter the company name"
     $office_location = Read-Host "Please enter $full_name's office location"
     $dept_name = Read-Host "Please enter $full_name's department"
@@ -54,10 +38,9 @@ function Create-NewUser {
 
     Read-Host "New user $user_name created! Press any key to verify..."
     
-    # Verifies new user was created and prints formatted table with eight properties for all AD users to screen
+    # Verifies new user was created and prints formatted table with all eight properties for all AD users to screen
 
     Get-ADUser -Filter * -Properties * | Format-Table Name, SamAccountName, Created, Company, Office, Department, Title, Enabled
 
     Read-Host "Press any key to continue..."
-    exit
 }
