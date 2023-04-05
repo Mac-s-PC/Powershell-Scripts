@@ -1,17 +1,16 @@
-# Input parameters
-$Username = Read-Host "Enter username"
-$IpAddress = Read-Host "Enter IPv4 address"
-$Gateway = Read-Host "Enter default gateway address"
-$Dns = Read-Host "Enter DNS server address"
+# Get interface object
+$interface = Get-NetAdapter -Name Ethernet
 
-# Add the IPv4 address for the new user
-New-NetIPAddress -InterfaceAlias "Ethernet" -AddressFamily IPv4 -IPAddress $IpAddress -PrefixLength 24 -DefaultGateway $Gateway
+# Set IPv4 configuration
+$ipAddress = Read-Host "Enter IPv4 address"
+$subnetMask = Read-Host "Enter subnet address"
+$gateway = Read-Host "Enter Default Gateway"
+New-NetIPAddress -InterfaceIndex $interface.ifIndex -IPAddress $ipAddress -PrefixLength 24 -DefaultGateway $gateway
 
-# Set the DNS server address for the new user
-Set-DnsClientServerAddress -InterfaceAlias "Ethernet" -ServerAddresses $Dns
+# Set DNS configuration
+$dns = Read-Host "Enter DNS Server Address"
+Set-DnsClientServerAddress -InterfaceIndex $interface.ifIndex -ServerAddresses $dns
 
-# Set the user's IPv4 address configuration to static
-Set-NetIPInterface -InterfaceAlias "Ethernet" -InterfaceMetric 10 -AddressFamily IPv4 -Dhcp Disabled -IPAddress $IpAddress -PrefixLength 24 -DefaultGateway $Gateway
-
-# Add the new user to the local network access group
-Add-LocalGroupMember -Group \"Network Configuration Operators" -Member $Username
+# Verify Changes 
+Write-Host ""
+ipconfig /all
