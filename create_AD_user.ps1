@@ -30,13 +30,17 @@ function Create-NewUser {
     $password = $null
     $verify_password = $null
 
-    do {
-        if ($password -ne $null -and $verify_password -ne $null -and $password -ne $verify_password) {
-            Write-Host "Passwords do not match, please try again"
-        }
+    while ($password -eq $null -or $password -ne $verify_password) {
         $password = Read-Host -AsSecureString "Please enter $full_name's secure password"
         $verify_password = Read-Host -AsSecureString "Please re-enter $full_name's secure password to verify"
-    } while ($password -eq $null -or $verify_password -eq $null -or $password -ne $verify_password)
+        if ($password -ne $verify_password) {
+            Write-Host "Passwords do not match, please try again"
+            $password = $null
+            $verify_password = $null
+        }
+    }
+
+    $password = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($password))
 
     $company_name = Read-Host "Please enter the company name"
     $office_location = Read-Host "Please enter $full_name's office location"
