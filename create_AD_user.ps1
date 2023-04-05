@@ -27,13 +27,16 @@ function Create-NewUser {
     $password = $null
     $verify_password = $null
 
-    while ($password -eq $null -or $password -ne $verify_password) {
-        $password = Read-Host -AsSecureString "Please enter $full_name's secure password"
-        $verify_password = Read-Host -AsSecureString "Please re-enter $full_name's secure password to verify"
-        if ($password -ne $verify_password) {
+    $password = $null
+    $verify_password = $null
+
+    do {
+        if ($password -ne $null -and $verify_password -ne $null -and $password -ne $verify_password) {
             Write-Host "Passwords do not match, please try again"
         }
-    }
+        $password = Read-Host -AsSecureString "Please enter $full_name's secure password"
+        $verify_password = Read-Host -AsSecureString "Please re-enter $full_name's secure password to verify"
+    } while ($password -eq $null -or $verify_password -eq $null -or $password -ne $verify_password)
 
     $company_name = Read-Host "Please enter the company name"
     $office_location = Read-Host "Please enter $full_name's office location"
@@ -47,7 +50,7 @@ function Create-NewUser {
 
     Read-Host "New user $user_name created! Press any key to verify..."
     
-    # Verifies new user was created and prints formatted table with all eight properties for all AD users to screen
+    # Verifies new user was created and prints formatted table with eight properties for all AD users to screen
 
     Get-ADUser -Filter * -Properties * | Format-Table Name, SamAccountName, Created, Company, Office, Department, Title, Enabled
 
