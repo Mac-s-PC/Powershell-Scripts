@@ -24,13 +24,16 @@ function Create-NewUser {
     Write-Host "Uppercase letters (A-Z), Lowercase letters (a-z), Digits (0-9), Special characters (e.g., !@#$%^&*)"
     Write-Host "" 
     
-    do {
+    $password = $null
+    $verify_password = $null
+
+    while ($password -eq $null -or $password -ne $verify_password) {
         $password = Read-Host -AsSecureString "Please enter $full_name's secure password"
         $verify_password = Read-Host -AsSecureString "Please re-enter $full_name's secure password to verify"
-        if (($password | ConvertFrom-SecureString) -ne ($verify_password | ConvertFrom-SecureString)) {
+        if ($password -ne $verify_password) {
             Write-Host "Passwords do not match, please try again"
         }
-    } while (($password | ConvertFrom-SecureString) -ne ($verify_password | ConvertFrom-SecureString))
+    }
 
     $company_name = Read-Host "Please enter the company name"
     $office_location = Read-Host "Please enter $full_name's office location"
