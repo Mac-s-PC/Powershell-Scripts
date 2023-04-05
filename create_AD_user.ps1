@@ -8,6 +8,8 @@
     # [Format-Table](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/format-table?view=powershell-7.3)
     # [PowerShell Looping: Understanding and Using Do…While](https://devblogs.microsoft.com/scripting/powershell-looping-understanding-and-using-do-while/)
     
+# Create-NewUser function takes user input to set six Active Directory properties
+    #
 
 function Create-NewUser {
     clear
