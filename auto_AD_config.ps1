@@ -103,7 +103,7 @@ function Create-OU{
     clear
     Write-Host ""
     $ou_name = Read-Host "Enter the name of the new Organizational Unit"
-    $ou_path = Read-Host "Enter the Distinguished Name (DN) of parent container where $ou_name OU will be created (ex DC=example)"
+    $global:$ou_path = Read-Host "Enter the Distinguished Name (DN) of parent container where $ou_name OU will be created (ex DC=example)"
     Write-Host ""
     Read-Host "Press enter to create the $ou_name OU in $ou_path and verify"
     New-ADOrganizationalUnit -Name $ou_name -Path $ou_path
@@ -156,7 +156,7 @@ function Create-NewUser{
 
     Read-Host "New user $user_name assigned to $ou_selection! Press enter to verify..."
     
-    Get-ADUser -Filter * -SearchBase "OU=$ou_selection,DC=greenspark,DC=local" | Out-Host
+    Get-ADUser -Filter * -SearchBase "OU=$ou_selection,$ou_path"
 
     Read-Host "Press enter to return to menu..."
 }
