@@ -113,7 +113,7 @@ function Create-OU{
     Read-Host "Press enter to create the $ou_name OU in $ou_path and verify"
     Write-Host ""
 
-    $created_ou = Get-ADOrganizationalUnit -Identity $newOU.DistinguishedName
+    $created_ou = Get-ADOrganizationalUnit -Identity $created_ou.DistinguishedName
     if ($createdOU) {
         Write-Host "New OU named $ouName in $ouPath was created successfully."
     } else {
