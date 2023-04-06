@@ -138,14 +138,25 @@ function Create-NewUser{
     Write-Host ""
 
     Read-Host "Press enter to create user..."
+    Write-Host ""
 
     # Executes New-ADUser PowerShell command to create new user and assigns values to eight properties
     New-ADUser -Name $full_name -SamAccountName $user_name -Accountpassword $password -Company $company_name  -Office $office_location -Department $dept_name -Title $job_title -Enabled $true
 
     Read-Host "New user $user_name created! Press enter to verify..."
-    
+
     # Verifies new user was created and prints formatted table with eight properties for all AD users to screen
     Get-ADUser -Filter * -Properties * | Format-Table Name, SamAccountName, Created, Company, Office, Department, Title, Enabled
+    Write-Host ""
+
+    $ou_selection = Read-Host "Enter the Distinguished Name (DN) of the users assigned OU (ex. OU=exampleOU,DC=example,DC=local)"
+    $user_DN = (Get-ADUser -Identity $user_name).DistinguishedName
+    Move-ADObject -Identity $user_DN -TargetPath $ou_selection
+    Write-Host ""
+
+    Read-Host "New user $user_name assigned to $ou_selection! Press enter to verify..."
+    
+    Get-ADOrganizationalUnit -Filter * | Select-Object Name, DistinguishedName | Out-Host
 
     Read-Host "Press enter to return to menu..."
 }
