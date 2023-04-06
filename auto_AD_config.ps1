@@ -12,6 +12,8 @@
     # [Get-ADForest](https://learn.microsoft.com/en-us/powershell/module/activedirectory/get-adforest?view=windowsserver2022-ps)
     # [Get-ADOrganizationalUnit](https://learn.microsoft.com/en-us/powershell/module/activedirectory/get-adorganizationalunit?view=windowsserver2022-ps)
     # [New-ADOrganizationalUnit](https://learn.microsoft.com/en-us/powershell/module/activedirectory/new-adorganizationalunit?view=windowsserver2022-ps)
+    # [Out-Null](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/out-null?view=powershell-7.3)
+    # [Out-Host](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/out-host?view=powershell-7.3)
 
 Import-Module ActiveDirectory
 
@@ -49,7 +51,7 @@ function Assign-IP-DNS{
     $subnetMask = Read-Host "Enter subnet address"
     $gateway = Read-Host "Enter Default Gateway"
 
-    New-NetIPAddress -InterfaceIndex $interface.ifIndex -IPAddress $ipAddress -PrefixLength 24 -DefaultGateway $gateway
+    New-NetIPAddress -InterfaceIndex $interface.ifIndex -IPAddress $ipAddress -PrefixLength 24 -DefaultGateway $gateway | Out-Null
 
     # Set DNS configuration
     $dns = Read-Host "Enter DNS Server Address"
@@ -101,12 +103,12 @@ function Create-OU{
     clear
     Write-Host ""
     $ou_name = Read-Host "Enter the name of the new Organizational Unit"
-    $ou_path = Read-Host "Enter the Distinguished Name (DN) of parent container where $ouname OU will be created (ex DC=example)"
+    $ou_path = Read-Host "Enter the Distinguished Name (DN) of parent container where $ou_name OU will be created (ex DC=example)"
     Write-Host ""
     Read-Host "Press enter to create the $ou_name OU in $ou_path and verify"
     New-ADOrganizationalUnit -Name $ou_name -Path $ou_path
     Write-Host ""
-    Get-ADOrganizationalUnit -Filter * | Select-Object Name, DistinguishedName
+    Get-ADOrganizationalUnit -Filter * | Select-Object Name, DistinguishedName | Out-Host
     Write-Host ""
 
     Read-Host "Press enter to return to menu"
