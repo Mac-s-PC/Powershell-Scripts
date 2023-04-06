@@ -149,12 +149,7 @@ function Create-NewUser{
     Get-ADUser -Filter * -Properties * | Format-Table Name, SamAccountName, Created, Company, Office, Department, Title, Enabled
     Write-Host ""
 
-    $ou_selection = Read-Host "Enter the Distinguished Name (DN) of the OU you wish to assign the user to (ex. OU=exampleOU,DC=example,DC=local)"
-    $user_DN = (Get-ADUser -Identity $user_name).DistinguishedName
-    Move-ADObject -Identity $user_DN -TargetPath $ou_selection
-    Write-Host ""
-
-    Read-Host "New user $user_name assigned to $ou_selection! Press enter to return to menu..."
+    Read-Host "Press enter to return to menu..."
 }
 
 function Remove-User{
