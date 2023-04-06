@@ -131,9 +131,9 @@ while($true) {
     Write-Host "----------------------------------------------------"
     Write-Host "Welcome to the Active Directory Configuration Wizard"
     Write-Host "----------------------------------------------------"
-    Write-Host "1) Assign Windows Server a static IPv4 address and Domain Name Server (DNS)"
+    Write-Host "1) Install Active Directory Domain Services"
     Write-Host "2) Rename Windows Server"
-    Write-Host "3) Install Active Directory Domain Services"
+    Write-Host "3) Assign Windows Server a static IPv4 address and Domain Name Server (DNS)"
     Write-Host "4) Create an Active Directory Forest"
     Write-Host "5) Create an Active Directory Organizational Unit (OU)"
     Write-Host "6) Create an Active Directory User Account"
@@ -144,11 +144,11 @@ while($true) {
 
     # Conditional used to determine which function to call based on user input above
     if ($Selection -eq 1) {
-    Assign-IP-DNS
+    exit
     } elseif ($Selection -eq 2) {
     Rename-Server
     } elseif ($Selection -eq 3) {
-    exit
+    Assign-IP-DNS
     } elseif ($Selection -eq 4) {
     exit
     } elseif ($Selection -eq 5) {

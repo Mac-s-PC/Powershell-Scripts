@@ -1,0 +1,30 @@
+PowerShell script that installs Active Directory Domain Services, creates a new AD forest, and creates Organizational Units (OU):
+
+
+# Install Active Directory Domain Services
+Install-WindowsFeature AD-Domain-Services -IncludeManagementTools
+
+
+# Create a new AD forest
+Import-Module ADDSDeployment
+$domainName = "example.com"
+$domainNetBIOSName = "EXAMPLE"
+$adminPassword = "P@ssword123"
+$safeModePassword = "P@ssword123"
+$domainMode = "WinThreshold"
+$forestMode = "WinThreshold"
+$domainCredential = New-Object System.Management.Automation.PSCredential ("$domainName\Administrator", (ConvertTo-SecureString $adminPassword -AsPlainText -Force))
+Install-ADDSForest -DomainName $domainName -DomainNetbiosName $domainNetBIOSName -SafeModeAdministratorPassword (ConvertTo-SecureString $safeModePassword -AsPlainText -Force) -DomainMode $domainMode -ForestMode $forestMode -Credential $domainCredential -InstallDNS -Force
+
+
+# Create Organizational Units
+$ouPath = "OU=IT,DC=example,DC=com"
+New-ADOrganizationalUnit -Name "IT" -Path $ouPath
+$ouPath = "OU=HR,DC=example,DC=com"
+New-ADOrganizationalUnit -Name "HR" -Path $ouPath
+$ouPath = "OU=Finance,DC=example,DC=com"
+New-ADOrganizationalUnit -Name "Finance" -Path $ouPath
+
+In this script, you can replace the values of $domainName, $domainNetBIOSName, $adminPassword, and $safeModePassword with your own desired values.
+The script creates an AD forest with the specified domain name and NetBIOS name, sets the domain and forest mode to "WinThreshold," and installs DNS. It also creates three OUs named "IT," "HR," and "Finance" under the domain with the path specified in $ouPath.
+Note: This script must be run with administrative privileges on a Windows Server machine.
