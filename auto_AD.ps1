@@ -17,29 +17,15 @@
 
 Import-Module ActiveDirectory
 
-function Assign-IP-DNS{
-    
-    # Get interface object
-    $interface = Get-NetAdapter -Name Ethernet
-
-    # Set IPv4 configuration
-    $ipAddress = Read-Host "Enter IPv4 address"
-    $subnetMask = Read-Host "Enter subnet address"
-    $gateway = Read-Host "Enter Default Gateway"
-
-    New-NetIPAddress -InterfaceIndex $interface.ifIndex -IPAddress $ipAddress -PrefixLength 24 -DefaultGateway $gateway
-
-    # Set DNS configuration
-    $dns = Read-Host "Enter DNS Server Address"
-
-    Set-DnsClientServerAddress -InterfaceIndex $interface.ifIndex -ServerAddresses $dns
-
-    # Verify Changes and return to manu
+function Install-AD{
+    clear
     Write-Host ""
-    Read-Host "Press any key to Verify Changes..."
+    Read-Host "Press any key to install the Active Directory Domain Services (AD DS) role along with its management tools and verify"
     Write-Host ""
 
-    ipconfig /all
+    Install-WindowsFeature AD-Domain-Services -IncludeManagementTools
+
+    Get-WindowsFeature -Name AD-Domain-Services, RSAT-ADDS
 
     Read-Host "Press any key to return to menu..."
 }
@@ -73,6 +59,41 @@ function Rename-Server{
     }
 
     Read-Host "Press any key to return to menu..."
+}
+
+function Assign-IP-DNS{
+    
+    # Get interface object
+    $interface = Get-NetAdapter -Name Ethernet
+
+    # Set IPv4 configuration
+    $ipAddress = Read-Host "Enter IPv4 address"
+    $subnetMask = Read-Host "Enter subnet address"
+    $gateway = Read-Host "Enter Default Gateway"
+
+    New-NetIPAddress -InterfaceIndex $interface.ifIndex -IPAddress $ipAddress -PrefixLength 24 -DefaultGateway $gateway
+
+    # Set DNS configuration
+    $dns = Read-Host "Enter DNS Server Address"
+
+    Set-DnsClientServerAddress -InterfaceIndex $interface.ifIndex -ServerAddresses $dns
+
+    # Verify Changes and return to manu
+    Write-Host ""
+    Read-Host "Press any key to Verify Changes..."
+    Write-Host ""
+
+    ipconfig /all
+
+    Read-Host "Press any key to return to menu..."
+}
+
+function Create-Forest{
+    exit
+}
+
+function Create-OU{
+    exit
 }
 
 function Create-NewUser {
@@ -144,15 +165,15 @@ while($true) {
 
     # Conditional used to determine which function to call based on user input above
     if ($Selection -eq 1) {
-    exit
+    Install-AD
     } elseif ($Selection -eq 2) {
     Rename-Server
     } elseif ($Selection -eq 3) {
     Assign-IP-DNS
     } elseif ($Selection -eq 4) {
-    exit
+    Create-Forest
     } elseif ($Selection -eq 5) {
-    exit
+    Create-OU
     } elseif ($Selection -eq 6) {
     Create-NewUser
     } elseif ($Selection -eq 7) {
