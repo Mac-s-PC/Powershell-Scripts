@@ -3,10 +3,17 @@
 # Date of latest revision: 04 MAR 23
 
 # Mac's PC Sources:
-    # [Press Any Key to Continue in PowerShell](https://java2blog.com/press-any-key-to-continue-powershell/)
-    # [Get-ADUser](https://learn.microsoft.com/en-us/powershell/module/activedirectory/get-aduser?view=windowsserver2022-ps)
-    # [Format-Table](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/format-table?view=powershell-7.3)
-    # [about_While] (https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_while?view=powershell-7.3)
+    # Creat-User function sources:
+        # [Press Any Key to Continue in PowerShell](https://java2blog.com/press-any-key-to-continue-powershell/)
+        # [Get-ADUser](https://learn.microsoft.com/en-us/powershell/module/activedirectory/get-aduser?view=windowsserver2022-ps)
+        # [Format-Table](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/format-table?view=powershell-7.3)
+    # Menu functionality sources:
+        # [about_While] (https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_while?view=powershell-7.3)
+    # Assign-IP-DNS function sources:
+        #
+    # Rename-Server function sources:
+        #
+    
 
 Import-Module ActiveDirectory
 
@@ -38,15 +45,42 @@ function Assign-IP-DNS{
 }
 
 function Rename-Server{
+    # Displays current server name and requests user input for new server name
+    clear
+    Write-Host ""
+    Write-Host "Your current computer name is $env:computername"
+    Write-Host ""
+    $new_server_name = Read-Host "Please provide the new computer name"
 
+    # Renames server to user provided input
+    Rename-Computer -NewName $new_server_name -Force
+    Write-Host ""
+    Write-Host "Your computer name has been changed to $new_server_name"
+    Write-Host ""
+    Read-Host "Press any key to restart and apply change..."
+
+    # Restart the computer
+    Restart-Computer
+
+    # Wait for the server to restart
+    Start-Sleep -Seconds 60
+
+    # Verify server name has changed
+    if (Test-Connection -ComputerName $new_server_name -Count 1 -ErrorAction SilentlyContinue) {
+        Write-Host "Server has been renamed to $new_server_name and is online."
+    } else {
+        Write-Host "Server rename failed."
+    }
+
+    Read-Host "Press any key to return to menu..."
 }
 
 function Create-NewUser {
+    # Requests user input for six Active Directory user properties and a user password
     clear
     Write-Host ""
     Write-Host "Welcome to new user account set up"
     Write-Host "----------------------------------"
-
     $full_name = Read-Host "Please enter new users full name (First Last)"
     $user_name = Read-Host "Please enter new users USERNAME"
     Write-Host ""
@@ -62,19 +96,38 @@ function Create-NewUser {
 
     Read-Host "Press any key to create user..."
 
+    # Executes New-ADUser PowerShell command to create new user and assigns values to eight properties
     New-ADUser -Name $full_name -SamAccountName $user_name -Accountpassword $password -Company $company_name  -Office $office_location -Department $dept_name -Title $job_title -Enabled $true
 
     Read-Host "New user $user_name created! Press any key to verify..."
     
-    # Verifies new user was created and prints formatted table with all eight properties for all AD users to screen
+    # Verifies new user was created and prints formatted table with eight properties for all AD users to screen
+    Get-ADUser -Filter * -Properties * | Format-Table Name, SamAccountName, Created, Company, Office, Department, Title, Enabled
+
+    Read-Host "Press any key to return to menu..."
+}
+
+function Remove-AD-User{
+    clear
+    Get-ADUser -Filter * -Properties * | Format-Table Name, SamAccountName, Created, Company, Office, Department, Title, Enabled
+    Write-Host ""
+    $user_remove = Read-Host "Please enter the USERNAME of the user you would like to remove"
+    Write-Host ""
+    Write-Host "You have chosen to remove the $user_remove account..."
+    Write-Host ""
+    Read-Host "Press any key to remove and verify..."
+
+    Remove-ADUser -Identity $user_remove -Confirm:$false
 
     Get-ADUser -Filter * -Properties * | Format-Table Name, SamAccountName, Created, Company, Office, Department, Title, Enabled
 
-    Read-Host "Press any key to continue..."
+    Read-Host "Press any key to return to menu"
 }
 
 while($true) {
     clear
+
+    # Prints menu and requests user selection
     Write-Host "----------------------------------------------------"
     Write-Host "Welcome to the Active Directory Configuration Wizard"
     Write-Host "----------------------------------------------------"
@@ -84,10 +137,12 @@ while($true) {
     Write-Host "4) Create an Active Directory Forest"
     Write-Host "5) Create an Active Directory Organizational Unit (OU)"
     Write-Host "6) Create an Active Directory User Account"
+    Write-Host "7) Remove an Active Directory User Account"
     Write-Host "exit) Exit Active Directory Configuration Wizard"
     Write-Host "----------------------------------------------------"
     $Selection = Read-Host "Please make a selection..."
 
+    # Conditional used to determine which function to call based on user input above
     if ($Selection -eq 1) {
     Assign-IP-DNS
     } elseif ($Selection -eq 2) {
@@ -100,6 +155,8 @@ while($true) {
     exit
     } elseif ($Selection -eq 6) {
     Create-NewUser
+    } elseif ($Selection -eq 7) {
+    Remove-AD-User
     } elseif ($Selection -eq "exit") {
     Write-Host ""
     Write-Host "You have exited the Active Directory Configuration Wizard successfully!"
