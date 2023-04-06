@@ -156,7 +156,7 @@ function Create-NewUser{
 
     Read-Host "New user $user_name assigned to $ou_selection! Press enter to verify..."
     
-    Get-ADOrganizationalUnit -Filter * | Select-Object Name, DistinguishedName | Out-Host
+    Get-ADUser -Filter * -SearchBase "OU=$ou_selection,DC=greenspark,DC=local"
 
     Read-Host "Press enter to return to menu..."
 }
