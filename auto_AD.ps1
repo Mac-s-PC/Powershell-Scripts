@@ -3,32 +3,16 @@
 # Date of latest revision: 04 MAR 23
 
 # Mac's PC Sources:
-    # Creat-User function sources:
-        # [Press Any Key to Continue in PowerShell](https://java2blog.com/press-any-key-to-continue-powershell/)
-        # [Get-ADUser](https://learn.microsoft.com/en-us/powershell/module/activedirectory/get-aduser?view=windowsserver2022-ps)
-        # [Format-Table](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/format-table?view=powershell-7.3)
-    # Menu functionality sources:
-        # [about_While] (https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_while?view=powershell-7.3)
-    # Assign-IP-DNS function sources:
-        #
-    # Rename-Server function sources:
-        #
-    
+    # [Press Any Key to Continue in PowerShell](https://java2blog.com/press-any-key-to-continue-powershell/)
+    # [Get-ADUser](https://learn.microsoft.com/en-us/powershell/module/activedirectory/get-aduser?view=windowsserver2022-ps)
+    # [Format-Table](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/format-table?view=powershell-7.3)
+    # [Remove-ADUser](https://learn.microsoft.com/en-us/powershell/module/activedirectory/remove-aduser?view=windowsserver2022-ps)
+    # [about_While] (https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_while?view=powershell-7.3)
+    # [Install-ADDSForest](https://learn.microsoft.com/en-us/powershell/module/addsdeployment/install-addsforest?view=windowsserver2022-ps)
+    # [Get-ADForest](https://learn.microsoft.com/en-us/powershell/module/activedirectory/get-adforest?view=windowsserver2022-ps)
+    # [Get-ADOrganizationalUnit](https://learn.microsoft.com/en-us/powershell/module/activedirectory/get-adorganizationalunit?view=windowsserver2022-ps)
 
 Import-Module ActiveDirectory
-
-function Install-AD{
-    clear
-    Write-Host ""
-    Read-Host "Press any key to install the Active Directory Domain Services (AD DS) role along with its management tools and verify"
-    Write-Host ""
-
-    Install-WindowsFeature AD-Domain-Services -IncludeManagementTools
-
-    Get-WindowsFeature -Name AD-Domain-Services, RSAT-ADDS
-
-    Read-Host "Press any key to return to menu..."
-}
 
 function Rename-Server{
     # Displays current server name and requests user input for new server name
@@ -43,7 +27,7 @@ function Rename-Server{
     Write-Host ""
     Write-Host "Your computer name has been changed to $new_server_name"
     Write-Host ""
-    Read-Host "Press any key to restart and apply change..."
+    Read-Host "Press enter to restart and apply change..."
 
     # Restart the computer
     Restart-Computer
@@ -51,14 +35,7 @@ function Rename-Server{
     # Wait for the server to restart
     Start-Sleep -Seconds 60
 
-    # Verify server name has changed
-    if (Test-Connection -ComputerName $new_server_name -Count 1 -ErrorAction SilentlyContinue) {
-        Write-Host "Server has been renamed to $new_server_name and is online."
-    } else {
-        Write-Host "Server rename failed."
-    }
-
-    Read-Host "Press any key to return to menu..."
+    Read-Host "Press enter to return to menu..."
 }
 
 function Assign-IP-DNS{
@@ -80,20 +57,70 @@ function Assign-IP-DNS{
 
     # Verify Changes and return to manu
     Write-Host ""
-    Read-Host "Press any key to Verify Changes..."
+    Read-Host "Press enter to Verify Changes..."
     Write-Host ""
 
     ipconfig /all
 
-    Read-Host "Press any key to return to menu..."
+    Read-Host "Press enter to return to menu..."
+}
+
+function Install-AD{
+    clear
+    Write-Host ""
+    Read-Host "Press enter to install the Active Directory Domain Services (AD DS) role along with its management tools and verify"
+    Write-Host ""
+
+    Install-WindowsFeature AD-Domain-Services -IncludeManagementTools
+
+    Get-WindowsFeature -Name AD-Domain-Services, RSAT-ADDS
+
+    Read-Host "Press enter to return to menu..."
 }
 
 function Create-Forest{
-    exit
+    clear
+    Write-Host ""
+    $forest_domain = Read-Host "Enter the domain name for the new Forest (ex. example.local)"
+    Write-Host ""
+    Write-Host "Passwords must be no less than seven characters and must include at least three of the following four character classes:"
+    Write-Host "Uppercase letters (A-Z), Lowercase letters (a-z), Digits (0-9), Special characters (e.g., !@#$%^&*)"
+    Write-Host ""
+    $forest_password = Read-Host -AsSecureString "Please enter $forest_domain domain's secure password"
+    Write-Host ""
+    Read-Host "Press enter to create $forest_domain domain and verify"
+    Write-Host ""
+
+    Install-ADDSForest -DomainName $forest_domain -SafeModeAdministratorPassword $forest_password -Force
+
+    $forest = Get-ADForest
+    if ($forest.Name -eq $forest_domain) {
+        Write-Host "Successfully created Forest: $($forest.Name)"
+    } else {
+        Write-Host "Failed to create Forest: $forest_domain"
+    }
+    Write-Host ""
+
+    Read-Host "Press enter to return to menu"
 }
 
 function Create-OU{
-    exit
+    clear
+    Write-Host ""
+    $ou_name = Read-Host "Enter the name of the new Organizational Unit"
+    $ou_path = Read-Host "Enter the Distinguished Name (DN) of parent container where $ouname OU will be created (ex DC=example)"
+    Write-Host ""
+    Read-Host "Press enter to create the $ou_name OU in $ou_path and verify"
+    Write-Host ""
+    
+    $created_ou = Get-ADOrganizationalUnit -Identity $newOU.DistinguishedName
+    if ($createdOU) {
+        Write-Host "New OU named $ouName in $ouPath was created successfully."
+    } else {
+        Write-Host "OU creation failed."
+    }
+
+    Read-Host "Press enter to return to menu"
 }
 
 function Create-NewUser {
@@ -115,20 +142,20 @@ function Create-NewUser {
     $job_title = Read-Host "Please enter $full_name's job title"
     Write-Host ""
 
-    Read-Host "Press any key to create user..."
+    Read-Host "Press enter to create user..."
 
     # Executes New-ADUser PowerShell command to create new user and assigns values to eight properties
     New-ADUser -Name $full_name -SamAccountName $user_name -Accountpassword $password -Company $company_name  -Office $office_location -Department $dept_name -Title $job_title -Enabled $true
 
-    Read-Host "New user $user_name created! Press any key to verify..."
+    Read-Host "New user $user_name created! Press enter to verify..."
     
     # Verifies new user was created and prints formatted table with eight properties for all AD users to screen
     Get-ADUser -Filter * -Properties * | Format-Table Name, SamAccountName, Created, Company, Office, Department, Title, Enabled
 
-    Read-Host "Press any key to return to menu..."
+    Read-Host "Press enter to return to menu..."
 }
 
-function Remove-AD-User{
+function Remove-User{
     clear
     Get-ADUser -Filter * -Properties * | Format-Table Name, SamAccountName, Created, Company, Office, Department, Title, Enabled
     Write-Host ""
@@ -136,13 +163,13 @@ function Remove-AD-User{
     Write-Host ""
     Write-Host "You have chosen to remove the $user_remove account..."
     Write-Host ""
-    Read-Host "Press any key to remove and verify..."
+    Read-Host "Press enter to remove and verify..."
 
     Remove-ADUser -Identity $user_remove -Confirm:$false
 
     Get-ADUser -Filter * -Properties * | Format-Table Name, SamAccountName, Created, Company, Office, Department, Title, Enabled
 
-    Read-Host "Press any key to return to menu"
+    Read-Host "Press enter to return to menu"
 }
 
 while($true) {
@@ -152,9 +179,9 @@ while($true) {
     Write-Host "----------------------------------------------------"
     Write-Host "Welcome to the Active Directory Configuration Wizard"
     Write-Host "----------------------------------------------------"
-    Write-Host "1) Install Active Directory Domain Services"
-    Write-Host "2) Rename Windows Server"
-    Write-Host "3) Assign Windows Server a static IPv4 address and Domain Name Server (DNS)"
+    Write-Host "1) Rename Windows Server"
+    Write-Host "2) Assign Windows Server a static IPv4 address and Domain Name Server (DNS)"
+    Write-Host "3) Install Active Directory Domain Services"
     Write-Host "4) Create an Active Directory Forest"
     Write-Host "5) Create an Active Directory Organizational Unit (OU)"
     Write-Host "6) Create an Active Directory User Account"
@@ -165,11 +192,11 @@ while($true) {
 
     # Conditional used to determine which function to call based on user input above
     if ($Selection -eq 1) {
-    Install-AD
-    } elseif ($Selection -eq 2) {
     Rename-Server
-    } elseif ($Selection -eq 3) {
+    } elseif ($Selection -eq 2) {
     Assign-IP-DNS
+    } elseif ($Selection -eq 3) {
+    Install-AD
     } elseif ($Selection -eq 4) {
     Create-Forest
     } elseif ($Selection -eq 5) {
@@ -177,7 +204,7 @@ while($true) {
     } elseif ($Selection -eq 6) {
     Create-NewUser
     } elseif ($Selection -eq 7) {
-    Remove-AD-User
+    Remove-User
     } elseif ($Selection -eq "exit") {
     Write-Host ""
     Write-Host "You have exited the Active Directory Configuration Wizard successfully!"
