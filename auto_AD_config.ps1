@@ -11,6 +11,7 @@
     # [Install-ADDSForest](https://learn.microsoft.com/en-us/powershell/module/addsdeployment/install-addsforest?view=windowsserver2022-ps)
     # [Get-ADForest](https://learn.microsoft.com/en-us/powershell/module/activedirectory/get-adforest?view=windowsserver2022-ps)
     # [Get-ADOrganizationalUnit](https://learn.microsoft.com/en-us/powershell/module/activedirectory/get-adorganizationalunit?view=windowsserver2022-ps)
+    # [New-ADOrganizationalUnit](https://learn.microsoft.com/en-us/powershell/module/activedirectory/new-adorganizationalunit?view=windowsserver2022-ps)
 
 Import-Module ActiveDirectory
 
@@ -103,6 +104,7 @@ function Create-OU{
     $ou_path = Read-Host "Enter the Distinguished Name (DN) of parent container where $ouname OU will be created (ex DC=example)"
     Write-Host ""
     Read-Host "Press enter to create the $ou_name OU in $ou_path and verify"
+    New-ADOrganizationalUnit -Name $ou_name -Path $ou_path
     Write-Host ""
     Get-ADOrganizationalUnit -Filter * | Select-Object Name, DistinguishedName
     Write-Host ""
