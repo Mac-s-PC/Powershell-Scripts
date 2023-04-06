@@ -10,6 +10,37 @@
 
 Import-Module ActiveDirectory
 
+function Assign-IP-DNS{
+    
+    # Get interface object
+    $interface = Get-NetAdapter -Name Ethernet
+
+    # Set IPv4 configuration
+    $ipAddress = Read-Host "Enter IPv4 address"
+    $subnetMask = Read-Host "Enter subnet address"
+    $gateway = Read-Host "Enter Default Gateway"
+
+    New-NetIPAddress -InterfaceIndex $interface.ifIndex -IPAddress $ipAddress -PrefixLength 24 -DefaultGateway $gateway
+
+    # Set DNS configuration
+    $dns = Read-Host "Enter DNS Server Address"
+
+    Set-DnsClientServerAddress -InterfaceIndex $interface.ifIndex -ServerAddresses $dns
+
+    # Verify Changes and return to manu
+    Write-Host ""
+    Read-Host "Press any key to Verify Changes..."
+    Write-Host ""
+
+    ipconfig /all
+
+    Read-Host "Press any key to return to menu..."
+}
+
+function Rename-Server{
+
+}
+
 function Create-NewUser {
     clear
     Write-Host ""
@@ -58,15 +89,15 @@ while($true) {
     $Selection = Read-Host "Please make a selection..."
 
     if ($Selection -eq 1) {
-    Create-NewUser
+    Assign-IP-DNS
     } elseif ($Selection -eq 2) {
-    Create-NewUser
+    Rename-Server
     } elseif ($Selection -eq 3) {
-    Create-NewUser
+    exit
     } elseif ($Selection -eq 4) {
-        Create-NewUser
+    exit
     } elseif ($Selection -eq 5) {
-    Create-NewUser
+    exit
     } elseif ($Selection -eq 6) {
     Create-NewUser
     } elseif ($Selection -eq "exit") {
