@@ -112,7 +112,7 @@ function Create-OU{
     Write-Host ""
     Read-Host "Press enter to create the $ou_name OU in $ou_path and verify"
     Write-Host ""
-    
+
     $created_ou = Get-ADOrganizationalUnit -Identity $newOU.DistinguishedName
     if ($createdOU) {
         Write-Host "New OU named $ouName in $ouPath was created successfully."
@@ -123,7 +123,7 @@ function Create-OU{
     Read-Host "Press enter to return to menu"
 }
 
-function Create-NewUser {
+function Create-NewUser{
     # Requests user input for six Active Directory user properties and a user password
     clear
     Write-Host ""
