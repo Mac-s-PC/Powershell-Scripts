@@ -154,7 +154,7 @@ function Remove-User{
     clear
     Get-ADUser -Filter * -Properties * | Format-Table Name, SamAccountName, Created, Company, Office, Department, Title, Enabled
     Write-Host ""
-    $user_remove = Read-Host "Please enter the USERNAME of the user you would like to remove"
+    $user_remove = Read-Host "Please enter the SamAccountName of the user you would like to remove"
     Write-Host ""
     Write-Host "You have chosen to remove the $user_remove account..."
     Write-Host ""
