@@ -123,9 +123,13 @@ function Create-NewUser{
     Write-Host "Uppercase letters (A-Z), Lowercase letters (a-z), Digits (0-9), Special characters (e.g., !@#$%^&*)"
     Write-Host "" 
     $password = Read-Host -AsSecureString "Please enter $full_name's secure password"
+    Write-Host ""
     $company_name = Read-Host "Please enter the company name"
+    Write-Host ""
     $office_location = Read-Host "Please enter $full_name's office location"
+    Write-Host ""
     $dept_name = Read-Host "Please enter $full_name's department"
+    Write-Host ""
     $job_title = Read-Host "Please enter $full_name's job title"
     Write-Host ""
 
