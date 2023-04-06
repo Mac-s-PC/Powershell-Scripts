@@ -27,7 +27,7 @@ function Rename-Server{
     Write-Host ""
     Write-Host "Your computer name has been changed to $new_server_name"
     Write-Host ""
-    Read-Host "Press enter to restart and apply change..."
+    Read-Host "Press enter to apply changes and restart computer..."
 
     # Restart the computer
     Restart-Computer
@@ -88,7 +88,7 @@ function Create-Forest{
     Write-Host ""
     $forest_password = Read-Host -AsSecureString "Please enter $forest_domain domain's secure password"
     Write-Host ""
-    Read-Host "Press enter to create forest and restart computer to apply changes"
+    Read-Host "Press enter to create forest, sign out, and restart computer"
     Write-Host ""
 
     Install-ADDSForest -DomainName $forest_domain -SafeModeAdministratorPassword $forest_password -Force
