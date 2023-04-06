@@ -93,14 +93,6 @@ function Create-Forest{
 
     Install-ADDSForest -DomainName $forest_domain -SafeModeAdministratorPassword $forest_password -Force
 
-    # $forest = Get-ADForest
-    # if ($forest.Name -eq $forest_domain) {
-    #     Write-Host "Successfully created Forest: $($forest.Name)"
-    # } else {
-    #     Write-Host "Failed to create Forest: $forest_domain"
-    # }
-    # Write-Host ""
-
     Read-Host "Press enter to return to menu"
 }
 
@@ -114,13 +106,6 @@ function Create-OU{
     Write-Host ""
     Get-ADOrganizationalUnit -Filter * | Select-Object Name, DistinguishedName
     Write-Host ""
-
-    # $created_ou = Get-ADOrganizationalUnit -Identity $created_ou.DistinguishedName
-    # if ($createdOU) {
-    #     Write-Host "New OU named $ouName in $ouPath was created successfully."
-    # } else {
-    #     Write-Host "OU creation failed."
-    # }
 
     Read-Host "Press enter to return to menu"
 }
